@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Closing on AWS Modernization Workshop Sample</title>
+    <link>/05_closing.html</link>
+    <description>Recent content in Closing on AWS Modernization Workshop Sample</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language><atom:link href="/05_closing/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Next Steps</title>
+      <link>/05_closing/01_next_steps.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/05_closing/01_next_steps.html</guid>
+      <description>
+Thank you for joining us for this AWS Dev Day Workshop with dbt. We hope you learned a lot!
+If you&amp;rsquo;re interested in learning more about dbt, we recommend these resources:
+ dbt Fundamentals course Join 15,000+ data professionals in our Slack community Contact our Team for more information about dbt at your org Join us at our Coalesce Conference  </description>
+    </item>
+    
+  </channel>
+</rss>

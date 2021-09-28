@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Creating the Workflow on AWS Modernization Workshop Sample</title>
+    <link>/02_creating_the_workflow.html</link>
+    <description>Recent content in Creating the Workflow on AWS Modernization Workshop Sample</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language><atom:link href="/02_creating_the_workflow/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Setup dbt Cloud Project</title>
+      <link>/02_creating_the_workflow/01_create_dbt_project.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/02_creating_the_workflow/01_create_dbt_project.html</guid>
+      <description>Setup dbt Cloud Project In this video, we will go through - setting up your dbt project - running and testing the sample models - see what it will look like to correct a broken test.
+
+Summary of this video: 1. Click on the hamburger menu and click on Develop to go to the IDE. 2. To initialize the dbt project, click on the initialize your project. 3. Take a look around the project after it is initialized.</description>
+    </item>
+    
+    <item>
+      <title>Setup CI/CD Workflow</title>
+      <link>/02_creating_the_workflow/02_setup_cicd_flow.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/02_creating_the_workflow/02_setup_cicd_flow.html</guid>
+      <description>Setup your Environments In this video, we will be creating the Production and CI/CD Environments that our jobs will run on.
+
+Summary of this video: 1. To create the Production environment, click on Environments under the hamburger menu. Click on New Environment. Name the Environment. Keep the Deployment type and the default dbt version (which is always the latest stable version). Use your user&amp;rsquo;s Redshift credentials for the Deployment environment and called the schema analytics.</description>
+    </item>
+    
+  </channel>
+</rss>

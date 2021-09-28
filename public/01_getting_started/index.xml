@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Getting Started on AWS Modernization Workshop Sample</title>
+    <link>/01_getting_started.html</link>
+    <description>Recent content in Getting Started on AWS Modernization Workshop Sample</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language><atom:link href="/01_getting_started/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>The Tools</title>
+      <link>/01_getting_started/01_the_tools.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/01_getting_started/01_the_tools.html</guid>
+      <description>The Tools In these videos, we will be providing a high level overview of the tools that we will be using for this workshop. We will be using Redshift, S3 Bucket, Github, and of course dbt. If you&amp;rsquo;re curious about what other data warehouses/data lakes dbt supports, check out this link. dbt Cloud also works with all git providers with advanced functionality with Github and Gitlab.
+In terms of understanding git for this workshop, dbt Cloud will guide you through a simplifed git workflow, where you don&amp;rsquo;t need to write a single git command.</description>
+    </item>
+    
+    <item>
+      <title>Overview of the Task</title>
+      <link>/01_getting_started/02_overview_of_the_task.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/01_getting_started/02_overview_of_the_task.html</guid>
+      <description>Overview of the Task In this video, we will reviewing the four stages of our task:
+ Setting up the workflow. Staging the raw data Transforming the raw data Use the CI/CD workflow to qualify the code before deployment.</description>
+    </item>
+    
+    <item>
+      <title>Setup dbt Cloud and Github Repository</title>
+      <link>/01_getting_started/03_sign_up_dbt_cloud_setup_repo.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/01_getting_started/03_sign_up_dbt_cloud_setup_repo.html</guid>
+      <description>Sign up for dbt Cloud and Create a Github Repository In this video, we will to guide you through signing up for a trial dbt Cloud project and setting up a empty github repository. When creating your repository, be sure to not check off any of the files. You want a empty repository to connect to dbt cloud.
+
+Helpful Tips  To sign up for a free dbt cloud account, you can go to this link and fill out the form.</description>
+    </item>
+    
+    <item>
+      <title>Setup Redshift</title>
+      <link>/01_getting_started/04_setup_redshift.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/01_getting_started/04_setup_redshift.html</guid>
+      <description>Setup Redshift and S3 To setup Redshift and S3, follow these steps:
+ Log into AWS.
+ Launch the stack. 
+ Click Next till the end and then select acknowledgement checkbox. Then click &amp;ldquo;Create Stack&amp;rdquo;
+ When the stack creation is complete, click on the Outputs tab to view information that you will use during rest of the workshop. Keep it handy.
+  Setup External Schema In this video, we are going to walk you through creating an external schema in your Redshift Cluster.</description>
+    </item>
+    
+    <item>
+      <title>Setup dbt Cloud Account</title>
+      <link>/01_getting_started/05_setup_dbt_cloud.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/01_getting_started/05_setup_dbt_cloud.html</guid>
+      <description>Setting up dbt Cloud account In this video, we will walk you through setting up your dbt Cloud account and dbt cloud project.
+
+Summary of this video:
+ The IDE is where we will be developing our dbt code. To setup the Redshift connection, you will need to choose Redshift as the data warehouse/database. Fill out the Redshift information from Cloudformation output. Your hostname is the entire hostname. The port is 5439 and the database is dbtworkshop.</description>
+    </item>
+    
+  </channel>
+</rss>

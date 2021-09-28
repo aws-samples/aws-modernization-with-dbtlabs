@@ -1,0 +1,310 @@
+Parameters:
+  LatestAmiId:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
+    AllowedValues:
+      - /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
+    Description: Image ID for the EC2 helper instance. DO NOT change this.
+Resources:
+  EC2SecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Security Group for EC2
+      VpcId: !Ref PubPrivateVPC
+      Tags:
+        - Key: Name
+          Value: dbt-Workshop-ec2-SecGroup
+  SelfIngress:
+      Type: 'AWS::EC2::SecurityGroupIngress'
+      DependsOn: EC2SecurityGroup
+      Properties:
+        GroupId: !Ref EC2SecurityGroup
+        IpProtocol: '-1'
+        SourceSecurityGroupId: !Ref EC2SecurityGroup
+
+  RSSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Security Group for Redshift
+      VpcId: !Ref PubPrivateVPC
+      Tags:
+        - Key: Name
+          Value: dbt-Workshop-rs-SecGroup
+
+  RSIngress1:
+      Type: 'AWS::EC2::SecurityGroupIngress'
+      DependsOn: RSSecurityGroup
+      Properties:
+        CidrIp: 52.45.144.63/32
+        GroupId: !Ref RSSecurityGroup
+        IpProtocol: tcp
+        FromPort: 5439
+        ToPort: 5439
+
+  RSIngress2:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    DependsOn: RSSecurityGroup
+    Properties:
+      CidrIp: 52.22.161.231/32
+      GroupId: !Ref RSSecurityGroup
+      IpProtocol: tcp
+      FromPort: 5439
+      ToPort: 5439
+
+  RSIngress3:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    DependsOn: RSSecurityGroup
+    Properties:
+      CidrIp: 54.81.134.249/32
+      GroupId: !Ref RSSecurityGroup
+      IpProtocol: tcp
+      FromPort: 5439
+      ToPort: 5439
+
+
+  PubPrivateVPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: 172.31.0.0/16
+      Tags:
+      - Key: Name
+        Value: 'dbtWorkshop'
+  PublicSubnet1:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref PubPrivateVPC
+
+      CidrBlock: 172.31.1.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: 'dbtWorkshopPublicSubnet'
+
+
+  PrivateSubnet1:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref PubPrivateVPC
+
+      CidrBlock: 172.31.3.0/24
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: 'dbtWorkshopPrivateSubnet'
+
+
+  InternetGateway:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Join [_, [!Ref 'AWS::StackName']]
+        - Key: Network
+          Value: Public
+
+  GatewayToInternet:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId: !Ref PubPrivateVPC
+      InternetGatewayId: !Ref InternetGateway
+
+  PublicRouteTable:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref PubPrivateVPC
+      Tags:
+        - Key: Network
+          Value: Public
+
+  PublicRoute:
+    Type: 'AWS::EC2::Route'
+    DependsOn: GatewayToInternet
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  PublicSubnet1RouteTableAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref PublicSubnet1
+      RouteTableId: !Ref PublicRouteTable
+
+
+
+  NatGateway:
+    Type: "AWS::EC2::NatGateway"
+    DependsOn: NatPublicIP
+    Properties:
+      AllocationId: !GetAtt NatPublicIP.AllocationId
+      SubnetId: !Ref PublicSubnet1
+
+  NatPublicIP:
+    Type: "AWS::EC2::EIP"
+    DependsOn: PubPrivateVPC
+    Properties:
+      Domain: vpc
+
+  PrivateRouteTable:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref PubPrivateVPC
+      Tags:
+        - Key: Network
+          Value: Private
+
+  PrivateRoute:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGateway
+
+  PrivateSubnet1RouteTableAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref PrivateSubnet1
+      RouteTableId: !Ref PrivateRouteTable
+
+  DataLakeBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Join
+        - '-'
+        - - dbt-data-lake
+          - !Ref 'AWS::AccountId'
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+
+  EC2Role:
+      Type: 'AWS::IAM::Role'
+      Properties:
+        Path: /
+        RoleName: dbt-EC2Role
+        AssumeRolePolicyDocument:
+          Version: 2012-10-17
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - ec2.amazonaws.com
+              Action: 'sts:AssumeRole'
+        ManagedPolicyArns:
+          - 'arn:aws:iam::aws:policy/AdministratorAccess'
+  EC2InstanceProfile:
+        Type: 'AWS::IAM::InstanceProfile'
+        Properties:
+          Path: /
+          Roles:
+            - !Ref EC2Role
+  dbtRedshiftSpectrumRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: redshift.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Path: /
+      Policies:
+        - PolicyName: spectrum-required-access
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 's3:Get*'
+                  - 's3:List*'
+                  - 'glue:CreateDatabase'
+                  - 'glue:DeleteTable'
+                  - 'glue:CreateTable'
+                  - 'glue:GetTable'
+                Resource:
+                  - !Sub 'arn:aws:s3:::${DataLakeBucket}'
+                  - !Sub 'arn:aws:s3:::${DataLakeBucket}/*'
+                  - !Sub 'arn:aws:glue:${AWS::Region}:${AWS::AccountId}:catalog'
+                  - !Sub 'arn:aws:glue:${AWS::Region}:${AWS::AccountId}:database/dbtworkshop'
+                  - !Sub 'arn:aws:glue:${AWS::Region}:${AWS::AccountId}:table/dbtworkshop/lineitem'
+                  - !Sub 'arn:aws:glue:${AWS::Region}:${AWS::AccountId}:table/dbtworkshop/orders'
+
+  WorkingEC2Instance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      InstanceType: t2.small
+      ImageId: !Ref LatestAmiId
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: 'true'
+          DeviceIndex: '0'
+          GroupSet:
+            - !Ref EC2SecurityGroup
+          SubnetId: !Ref PublicSubnet1
+      UserData: !Base64
+        'Fn::Join':
+          - ''
+          - - |
+              #!/bin/bash -ex
+            - |
+            - >
+            - 'aws s3 cp s3://tpch-sample-data/tpch_data/ s3://'
+            - !Ref DataLakeBucket
+            - '/dbtworkshopdata/ --recursive'
+
+      Tags:
+        - Key: Name
+          Value: EC2-dbt-box
+
+  dbtRedshiftCluster:
+    Type: 'AWS::Redshift::Cluster'
+    DependsOn: EC2Role
+    Properties:
+      ClusterType: single-node
+      NodeType: dc2.large
+      DBName: dbtworkshop
+      MasterUsername: dbtadmin
+      MasterUserPassword: Dbtadmin108!
+      VpcSecurityGroupIds:
+        - !Ref RSSecurityGroup
+      ClusterSubnetGroupName: !Ref dbtRedshiftClusterSubnetGroup
+      PubliclyAccessible: 'true'
+      Port: 5439
+      IamRoles:
+        - 'Fn::GetAtt':
+            - dbtRedshiftSpectrumRole
+            - Arn
+  dbtRedshiftClusterSubnetGroup:
+    Type: 'AWS::Redshift::ClusterSubnetGroup'
+    Properties:
+      Description: Cluster subnet group
+      SubnetIds:
+        - !Ref PublicSubnet1
+
+
+Outputs:
+    RSHostName:
+      Description: Redshift host name
+      Value: !Sub '${dbtRedshiftCluster.Endpoint.Address}'
+    RSRole:
+      Description: ARN of IAM role attached to RS cluster
+      Value: !GetAtt dbtRedshiftSpectrumRole.Arn
+    RSdatabase:
+      Description: Redshift database
+      Value: 'dbtworkshop'
+    RSadminame:
+      Description: Redshift admin name
+      Value: 'dbtadmin'
+    RSadminpassword:
+      Description: Redshift admin password
+      Value: 'Dbtadmin108!'
+    Workshopbucket:
+      Description: S3 bucket containing workshop files
+      Value: !Ref DataLakeBucket
+
+
+
