@@ -62,13 +62,17 @@ Resources:
                   - s3:GetObject
                   - s3:PutObject
                   - s3:GetObjectVersion
-              - Resource: !Sub arn:aws:s3:::${WebsiteBucket}/*
+              - Resource: 
+                  - !Sub arn:aws:s3:::${WebsiteBucket}/*
+                  - !Sub arn:aws:s3:::${WebsiteBucket}
                 Effect: Allow
                 Action:
                   - s3:GetObject
                   - s3:PutObject
                   - s3:GetObjectVersion
                   - s3:ListBucket
+                  - S3:DeleteObject
+                  - S3:DeleteObjectVersion
               - Effect: Allow
                 Action:
                   - cloudfront:CreateInvalidation
@@ -108,6 +112,29 @@ Resources:
   ArtifactBucket:
     Type: AWS::S3::Bucket
     DeletionPolicy: Delete
+    Properties:
+      VersioningConfiguration:
+        Status: Enabled 
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: 'AES256'
+
+  ArtifactBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref 'ArtifactBucket'
+      PolicyDocument:
+        Statement:
+        - Action: 's3:*'  
+          Effect: Deny
+          Resource: 
+            - !Join ['', ['arn:aws:s3:::', !Ref 'ArtifactBucket', /*]]
+            - !Join ['', ['arn:aws:s3:::', !Ref 'ArtifactBucket']]
+          Principal: '*'
+          Condition:
+            Bool:
+              aws:SecureTransport: false
 
   CodeBuildProject:
     Type: AWS::CodeBuild::Project
