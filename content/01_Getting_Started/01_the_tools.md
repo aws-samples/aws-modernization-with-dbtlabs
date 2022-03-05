@@ -30,7 +30,7 @@ In terms of understanding git for this workshop, dbt Cloud will guide you throug
 - Using dbt's ref function and ability to write DDL and DML, you can create repeatable builds and promote through environments without having to change the code. The ref function also builds dependencies automatically so you can focus on modeling, not run order or having to manually create the DAG via a third party tool.
 - dbt docs compiles the information you supply dbt via the project and the data warehouse information schema to a sharable documentation site that you can use for yourself and stakeholderse. Documentation also can automatically display lineage from raw objects to transformation to third party dependencies.
 - dbt Tests are all written in SQL and can be used to validate your data assumptions. 
-- By using dbt, you can provide a version control and CI/CD workflow to another comfortable with SQL.
+- By using dbt, you can provide a version control and CI/CD workflow to anyone comfortable with SQL.
 
 
 
