@@ -9,7 +9,7 @@ weight: 1
 ### Welcome
 
 The format of this workshop will consist of trainings videos with helpful 
-code snippets and tips related to the workshop. Be sure to pay attention to pay attention to the text along 
+code snippets and tips related to the workshop. Be sure to pay attention to the text along 
 with the video. There are also related videos linked in the video for you to learn more 
 or cover any potential confusions.
 
