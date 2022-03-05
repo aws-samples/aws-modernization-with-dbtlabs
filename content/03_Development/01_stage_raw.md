@@ -19,8 +19,12 @@ In this video, we will demostrate how to install a package and then use the pack
 ```yml 
 packages:
    - package: dbt-labs/dbt_external_tables
-      version: 0.7.0
+      version: 0.8.0
+   - package: dbt-labs/dbt_utils
+      version: 0.8.1  
 ```
+
+The video mentions that installing the `dbt_external_tables` package will also install the `dbt_utils` package because it is used as a dependency. While this was true in previous versions, the updated version being used now does not perform the same auto-install. It's important to include the `dbt_utils` package as shown above when creating your `packages.yml` file to avoid errors when creating your external tables in step 11.
 4. Run `dbt deps` to install the package. A way to remember this command is deps = dependencies. 
 5. Create a `staging` folder in the `models` folder. 
 6. Create a folder named `tpch` inside of the `staging` folder.
@@ -42,7 +46,7 @@ version: 2
                 
           - name: lineitem
             external:
-                location: "s3://dbt-data-lake-[Insert AWS Account ID]]/dbtworkshopdata/lineitem/lineitem" 
+                location: "s3://dbt-data-lake-[Insert AWS Account ID]]/dbtworkshopdata/lineitem/" 
                 row_format: serde 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
                 table_properties: "('skip.header.line.count'='1')"
             columns:
@@ -78,7 +82,7 @@ version: 2
          
           - name: orders
             external:
-                location: "s3://dbt-data-lake-[Insert AWS Account ID]/dbtworkshopdata/orders/orders"      
+                location: "s3://dbt-data-lake-[Insert AWS Account ID]/dbtworkshopdata/orders/"      
                 row_format: serde 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
                 table_properties: "('skip.header.line.count'='1')"
             columns:
