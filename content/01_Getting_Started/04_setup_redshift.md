@@ -7,7 +7,9 @@ weight: 4
 ## Setup Redshift and S3
 
 To setup Redshift and S3, follow these steps:
-## For AWS Event
+
+### For AWS Event
+
 You will be provided to an AWS Account to run this workshop. The temporary account is being created using Event Engine. You will be provided a participant hash key to login to your temporary account.
 Follow these steps to start using your account:
 
@@ -15,12 +17,15 @@ Follow these steps to start using your account:
 1. Enter the provided hash in the text box. The button on the bottom right corner changes to Accept Terms & Login. Click on that button to continue.
 1. Set Team Name to either individual name or a team name if part of a team.
 1. Click on AWS Console on dashboard. This will open AWS Console in a new browser tab.
-
-## For Non-AWS Event
-1. Log into AWS. 
-
 1. Launch the stack. <a href="https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=dbt-workshop&templateURL=https://tpch-sample-data.s3.amazonaws.com/create-dbtworkshop-infr" />Click Here</a>
-1.  Click `Next` till the end and then select acknowledgement checkbox. Then click "Create Stack"
+1. Click `Next` till the end and then select acknowledgement checkbox. Then click "Create Stack"
+1. When the stack creation is complete, click on the <b>Outputs</b> tab to view information that you will use during rest of the workshop. Keep it handy.
+
+### For Non-AWS Event
+
+1. Log into AWS account with your credentials. 
+1. Launch the stack. <a href="https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=dbt-workshop&templateURL=https://tpch-sample-data.s3.amazonaws.com/create-dbtworkshop-infr" />Click Here</a>
+1. Click `Next` till the end and then select acknowledgement checkbox. Then click "Create Stack"
 1. When the stack creation is complete, click on the <b>Outputs</b> tab to view information that you will use during rest of the workshop. Keep it handy.
 
 
