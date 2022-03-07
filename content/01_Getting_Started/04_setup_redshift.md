@@ -8,7 +8,7 @@ weight: 4
 
 To setup Redshift and S3, follow these steps:
 
-### For AWS Event
+### For AWS Dev Day Live Event
 
 You will be provided to an AWS Account to run this workshop. The temporary account is being created using Event Engine. You will be provided a participant hash key to login to your temporary account.
 Follow these steps to start using your account:
